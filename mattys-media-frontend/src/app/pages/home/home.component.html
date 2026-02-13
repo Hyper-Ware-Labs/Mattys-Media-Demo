@@ -1,0 +1,88 @@
+<div class="min-h-screen pt-24 pb-16">
+  <!-- Hero Section -->
+  <section class="container mx-auto px-6 py-24" data-testid="hero-section">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="text-primary text-sm font-bold mb-4 tracking-widest" data-testid="hero-tagline">PRINT ON DEMAND</div>
+        <h1 class="text-5xl lg:text-7xl font-heading font-black leading-none mb-6" data-testid="hero-title">
+          MAKE IT <span class="text-primary">LOUD</span><br>
+          MAKE IT <span class="text-primary">YOURS</span>
+        </h1>
+        <p class="text-white/80 text-lg mb-8 font-body" data-testid="hero-description">
+          Premium custom printing for the next generation. Business cards, banners, posters - all with that Gen Z energy.
+        </p>
+        <div class="flex gap-4">
+          <a routerLink="/products" class="bg-primary text-black px-8 py-4 font-bold uppercase tracking-widest border-2 border-primary shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all" data-testid="shop-now-btn">
+            Shop Now
+          </a>
+          <a routerLink="/products" class="bg-transparent text-primary px-8 py-4 font-bold uppercase tracking-widest border-2 border-primary shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all" data-testid="browse-btn">
+            Browse
+          </a>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="aspect-square border-2 border-primary/50 bg-black/90 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1647029734771-53e448994b08?w=800" alt="Abstract neon shapes" class="w-full h-full object-cover opacity-80">
+        </div>
+        <div class="absolute -bottom-4 -right-4 bg-primary text-black px-6 py-3 font-bold text-2xl" data-testid="hero-badge">
+          EST. 2026
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="container mx-auto px-6 py-16" data-testid="categories-section">
+    <h2 class="text-4xl font-heading font-black mb-12 text-center" data-testid="categories-title">
+      EXPLORE <span class="text-primary">CATEGORIES</span>
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a *ngFor="let category of categories" 
+         [routerLink]="['/products', category.slug]"
+         class="border-2 border-primary/50 bg-black/90 p-8 hover:border-primary transition-colors group"
+         [attr.data-testid]="'category-' + category.slug">
+        <div class="text-6xl mb-4">{{ category.icon }}</div>
+        <h3 class="text-2xl font-heading font-black mb-2 group-hover:text-primary transition-colors">{{ category.name }}</h3>
+        <div class="text-primary font-bold uppercase tracking-widest text-sm">Explore →</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="container mx-auto px-6 py-16" data-testid="featured-section">
+    <h2 class="text-4xl font-heading font-black mb-12 text-center" data-testid="featured-title">
+      FEATURED <span class="text-primary">PRODUCTS</span>
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a *ngFor="let product of featuredProducts" 
+         [routerLink]="['/product', product.id]"
+         class="border-2 border-primary/50 bg-black/90 overflow-hidden hover:border-primary transition-colors group"
+         [attr.data-testid]="'product-' + product.id">
+        <div class="aspect-video overflow-hidden">
+          <img [src]="product.images[0]" [alt]="product.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <div class="p-6">
+          <div class="text-primary text-xs font-bold uppercase tracking-widest mb-2">{{ product.category }}</div>
+          <h3 class="text-xl font-heading font-black mb-2 group-hover:text-primary transition-colors">{{ product.name }}</h3>
+          <p class="text-white/60 text-sm mb-4">{{ product.description.substring(0, 80) }}...</p>
+          <div class="text-2xl font-bold text-primary">${{ product.base_price }}</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="container mx-auto px-6 py-24" data-testid="cta-section">
+    <div class="border-2 border-primary bg-black/90 p-12 text-center">
+      <h2 class="text-5xl font-heading font-black mb-6" data-testid="cta-title">
+        READY TO <span class="text-primary">PRINT?</span>
+      </h2>
+      <p class="text-white/80 text-lg mb-8 max-w-2xl mx-auto" data-testid="cta-description">
+        Join thousands of Gen Z creators, entrepreneurs, and rebels making their mark with Acid Print.
+      </p>
+      <a routerLink="/products" class="inline-block bg-primary text-black px-12 py-5 font-bold uppercase tracking-widest border-2 border-primary shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-lg" data-testid="cta-btn">
+        Start Printing
+      </a>
+    </div>
+  </section>
+</div>

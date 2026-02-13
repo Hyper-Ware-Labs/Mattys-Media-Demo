@@ -1,0 +1,98 @@
+<div class="min-h-screen pt-24 pb-16">
+  <div class="container mx-auto px-6">
+    <h1 class="text-5xl font-heading font-black mb-8" data-testid="cart-title">
+      YOUR <span class="text-primary">CART</span>
+    </h1>
+
+    <div *ngIf="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Cart Items -->
+      <div class="lg:col-span-2 space-y-4" data-testid="cart-items">
+        <div *ngFor="let item of cartItems; let i = index" 
+             class="border-2 border-primary/50 bg-black/90 p-6 hover:border-primary transition-colors"
+             [attr.data-testid]="'cart-item-' + i">
+          <div class="flex gap-6">
+            <div class="flex-1">
+              <h3 class="text-xl font-heading font-black mb-2" [attr.data-testid]="'item-name-' + i">{{ item.product_name }}</h3>
+              <p *ngIf="item.custom_text" class="text-white/60 text-sm mb-3" [attr.data-testid]="'item-custom-text-' + i">
+                Custom: {{ item.custom_text }}
+              </p>
+              <div class="text-primary font-bold text-xl" [attr.data-testid]="'item-price-' + i">${{ item.price }}</div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-2">
+                <button (click)="updateQuantity(i, item.quantity - 1)" 
+                        class="bg-primary text-black w-10 h-10 font-bold hover:bg-white transition-colors text-xl flex items-center justify-center"
+                        [attr.data-testid]="'decrease-qty-' + i">
+                  -
+                </button>
+                <span class="text-white font-bold w-12 text-center text-lg" [attr.data-testid]="'item-quantity-' + i">{{ item.quantity }}</span>
+                <button (click)="updateQuantity(i, item.quantity + 1)" 
+                        class="bg-primary text-black w-10 h-10 font-bold hover:bg-white transition-colors text-xl flex items-center justify-center"
+                        [attr.data-testid]="'increase-qty-' + i">
+                  +
+                </button>
+              </div>
+              <button (click)="removeItem(i)" 
+                      class="text-primary hover:text-white text-sm uppercase font-bold transition-colors"
+                      [attr.data-testid]="'remove-item-' + i">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="lg:col-span-1">
+        <div class="border-2 border-primary bg-black/90 p-8 sticky top-24" data-testid="cart-summary">
+          <h2 class="text-2xl font-heading font-black mb-6">ORDER SUMMARY</h2>
+          
+          <div class="space-y-4 mb-6">
+            <div class="flex justify-between text-white/80">
+              <span>Items ({{ cartItems.length }})</span>
+              <span data-testid="items-subtotal">${{ total.toFixed(2) }}</span>
+            </div>
+            <div class="flex justify-between text-white/80">
+              <span>Shipping</span>
+              <span>Calculated at checkout</span>
+            </div>
+          </div>
+
+          <div class="border-t-2 border-primary/30 pt-4 mb-6">
+            <div class="flex justify-between items-center">
+              <span class="text-white font-bold uppercase tracking-wide">TOTAL:</span>
+              <span class="text-3xl font-bold text-primary" data-testid="cart-total">${{ total.toFixed(2) }}</span>
+            </div>
+          </div>
+
+          <button 
+            (click)="proceedToCheckout()"
+            class="w-full bg-primary text-black px-8 py-5 font-bold uppercase tracking-widest border-2 border-primary shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-lg mb-4"
+            data-testid="checkout-btn">
+            Proceed to Checkout
+          </button>
+
+          <button 
+            (click)="clearCart()"
+            class="w-full bg-transparent text-white/60 hover:text-white px-8 py-3 font-bold uppercase tracking-widest text-sm"
+            data-testid="clear-cart-btn">
+            Clear Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty Cart -->
+    <div *ngIf="cartItems.length === 0" class="text-center py-24" data-testid="empty-cart">
+      <div class="text-6xl mb-6">🛒</div>
+      <h2 class="text-3xl font-heading font-black mb-4">YOUR CART IS EMPTY</h2>
+      <p class="text-white/60 text-lg mb-8">Time to fill it with some amazing prints!</p>
+      <a routerLink="/products" 
+         class="inline-block bg-primary text-black px-12 py-5 font-bold uppercase tracking-widest border-2 border-primary shadow-brutal hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all text-lg"
+         data-testid="shop-now-empty-btn">
+        Shop Now
+      </a>
+    </div>
+  </div>
+</div>

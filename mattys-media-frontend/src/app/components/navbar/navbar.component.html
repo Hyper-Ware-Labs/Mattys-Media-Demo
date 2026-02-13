@@ -1,0 +1,29 @@
+<nav class="fixed top-4 left-4 right-4 z-50 bg-black/80 backdrop-blur-xl border border-primary/30 px-6 py-4 flex justify-between items-center" data-testid="navbar">
+  <a routerLink="/" class="text-2xl font-heading font-black tracking-tighter text-primary" data-testid="logo-link">
+    MATTY'S<span class="text-white">MEDIA</span>
+  </a>
+
+  <div class="flex items-center gap-8">
+    <a routerLink="/products" class="text-white hover:text-primary transition-colors font-bold uppercase tracking-wide" data-testid="products-link">
+      Products
+    </a>
+    
+    <a routerLink="/cart" class="relative" data-testid="cart-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+        <circle cx="8" cy="21" r="1"/>
+        <circle cx="19" cy="21" r="1"/>
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+      </svg>
+      <span *ngIf="cartCount > 0" class="absolute -top-2 -right-2 bg-primary text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center" data-testid="cart-count">
+        {{ cartCount }}
+      </span>
+    </a>
+
+    <div *ngIf="user" class="flex items-center gap-4">
+      <span class="text-white text-sm" data-testid="user-name">{{ user.name }}</span>
+      <button (click)="logout()" class="text-primary hover:text-white transition-colors text-sm font-bold uppercase" data-testid="logout-btn">
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
