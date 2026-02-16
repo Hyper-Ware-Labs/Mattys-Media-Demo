@@ -153,7 +153,7 @@ async def get_current_user(
 
 @api_router.get("/")
 async def root():
-    return {"message": "Acid Print API - Gen Z Print Shop"}
+    return {"message": "Mattty's Media API - Gen Z Print Shop"}
 
 
 # Products
