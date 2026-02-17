@@ -46,7 +46,7 @@ export class ApiService {
   private tokenKey = 'auth_token';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  
+
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   public cartItems$ = this.cartItemsSubject.asObservable();
 
@@ -99,6 +99,8 @@ export class ApiService {
         tap(response => {
           localStorage.setItem(this.tokenKey, response.token);
           this.currentUserSubject.next(response.user);
+          this.syncCartToServer();
+          this.mergeServerCart();
         })
       );
   }
@@ -110,6 +112,7 @@ export class ApiService {
           localStorage.setItem(this.tokenKey, response.token);
           this.currentUserSubject.next(response.user);
           this.syncCartToServer();
+          this.mergeServerCart();
         })
       );
   }
@@ -134,7 +137,7 @@ export class ApiService {
   // Cart (Local Storage)
   addToCart(item: CartItem): void {
     const currentCart = this.cartItemsSubject.value;
-    const existingIndex = currentCart.findIndex(i => 
+    const existingIndex = currentCart.findIndex(i =>
       i.product_id === item.product_id && i.custom_text === item.custom_text
     );
 
@@ -179,9 +182,43 @@ export class ApiService {
   private syncCartToServer(): void {
     const items = this.cartItemsSubject.value;
     if (items.length > 0 && this.isAuthenticated()) {
-      const total = this.getCartTotal();
       this.http.post(`${this.apiUrl}/cart`, { items }, { headers: this.getHeaders() })
-        .subscribe();
+        .subscribe({
+          next: () => console.log('Cart synced to server'),
+          error: (err) => console.error('Error syncing cart to server:', err)
+        });
+    }
+  }
+
+  // Merge server cart with local cart (when user logs in)
+  private mergeServerCart(): void {
+    if (this.isAuthenticated()) {
+      this.http.get<Cart>(`${this.apiUrl}/cart`, { headers: this.getHeaders() })
+        .subscribe({
+          next: (serverCart) => {
+            if (serverCart && serverCart.items && serverCart.items.length > 0) {
+              const localItems = this.cartItemsSubject.value;
+              const mergedItems = [...serverCart.items];
+
+              // Add local items that aren't in server cart
+              for (const localItem of localItems) {
+                const existingIndex = mergedItems.findIndex(i =>
+                  i.product_id === localItem.product_id && i.custom_text === localItem.custom_text
+                );
+                if (existingIndex > -1) {
+                  // Item exists, add quantities
+                  mergedItems[existingIndex].quantity += localItem.quantity;
+                } else {
+                  // New item, add it
+                  mergedItems.push(localItem);
+                }
+              }
+
+              this.saveCartToLocalStorage(mergedItems);
+            }
+          },
+          error: (err) => console.error('Error fetching cart from server:', err)
+        });
     }
   }
 
